@@ -1,3 +1,5 @@
+import React from 'react'
+
 const CustomInput = (props) => {
    const { type, label, i_id, i_class } = props;
    return (
@@ -12,4 +14,5 @@ const CustomInput = (props) => {
       </div>
    )
 }
+
 export default CustomInput
