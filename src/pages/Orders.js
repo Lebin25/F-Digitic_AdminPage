@@ -45,11 +45,11 @@ const Orders = () => {
 
    const orderState = useSelector((state) => state.auth.orders)
    const data1 = [];
-   for (let i = 0; i < orderState.length; i++) {
+   for (let i = 0; i < orderState?.length; i++) {
       data1.push({
          key: i + 1,
-         name: orderState[i].orderby.firstname + " " + orderState[i].orderby.lastname,
-         products: orderState[i].products.map((i, j) => {
+         name: orderState[i]?.orderby?.firstname + " " + orderState[i]?.orderby?.lastname,
+         products: orderState[i]?.products?.map((i, j) => {
             return (
                <ul key={j}>
                   <li>{i.product.title}</li>

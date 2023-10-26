@@ -23,7 +23,6 @@ const getOrders = async () => {
    return response.data;
 }
 
-
 const authService = {
    login,
    getOrders,
