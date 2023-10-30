@@ -12,6 +12,7 @@ const columns = [
       title: "SNo",
       dataIndex: "key",
    },
+
    {
       title: "Name",
       dataIndex: "name",
@@ -70,9 +71,9 @@ const Couponlist = () => {
                   onClick={() => showModal(couponState[i]._id)}
                >
                   <AiFillDelete />
-                  </button>
+               </button>
             </>
-         )
+         ),
       });
    }
    const deleteCoupon = (e) => {
@@ -82,7 +83,7 @@ const Couponlist = () => {
       setTimeout(() => {
 
          dispatch(getAllCoupon());
-      }, 100);
+      }, 500);
    };
    return (
       <div>

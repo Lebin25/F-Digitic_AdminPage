@@ -27,7 +27,7 @@ const Addblogcat = () => {
       }
    }, [getBlogCatId])
 
-   
+
    useEffect(() => {
       if (isSuccess && createdBlogCategory) {
          toast.success('Blog Category Added Successfully!');
@@ -57,7 +57,7 @@ const Addblogcat = () => {
             formik.resetForm();
             setTimeout(() => {
                dispatch(resetState())
-            }, 300)
+            }, 500)
          }
       },
    });

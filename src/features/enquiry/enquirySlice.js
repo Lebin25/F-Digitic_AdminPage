@@ -9,6 +9,7 @@ export const getEnquiries = createAsyncThunk('enquiry/get-enquiries', async (thu
       return thunkAPI.rejectWithValue(error)
    }
 })
+
 export const deleteAnEnquiry = createAsyncThunk(
    "enquiry/delete-enquiry",
    async (id, thunkAPI) => {
@@ -43,6 +44,7 @@ export const updateAnEnquiry = createAsyncThunk(
 );
 
 export const resetState = createAction("Reset_all");
+
 const initialState = {
    enquiries: [],
    isError: false,

@@ -15,7 +15,6 @@ const Addcolor = () => {
    const dispatch = useDispatch();
    const location = useLocation();
    const navigate = useNavigate();
-
    const getColorId = location.pathname.split('/')[3];
    const newColor = useSelector((state) => state.color)
    const { isSuccess, isError, isLoading, createdColor, colorName, updatedColor } = newColor;
@@ -57,7 +56,7 @@ const Addcolor = () => {
             formik.resetForm();
             setTimeout(() => {
                dispatch(resetState())
-            }, 300)
+            }, 500)
          }
       },
    });

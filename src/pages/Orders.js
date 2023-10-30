@@ -46,10 +46,10 @@ const Orders = () => {
    const orderState = useSelector((state) => state.auth.orders)
 
    const data1 = [];
-   for (let i = 0; i < orderState?.length; i++) {
+   for (let i = 0; i < orderState.length; i++) {
       data1.push({
          key: i + 1,
-         name: orderState[i]?.orderby?.firstname + " " + orderState[i]?.orderby?.lastname,
+         name: orderState[i].orderby.firstname + " " + orderState[i].orderby.lastname,
          products:
             <Link to={`/admin/orders/${orderState[i]._id}`}>
                View Orders

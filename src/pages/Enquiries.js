@@ -46,6 +46,7 @@ const Enquiries = () => {
    };
 
    const dispatch = useDispatch();
+
    useEffect(() => {
       dispatch(resetState())
       dispatch(getEnquiries())
@@ -97,7 +98,7 @@ const Enquiries = () => {
       setOpen(false)
       setTimeout(() => {
          dispatch(getEnquiries())
-      }, 100)
+      }, 500)
    }
    return (
       <div>

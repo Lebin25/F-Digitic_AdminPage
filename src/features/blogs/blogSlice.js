@@ -8,8 +8,7 @@ export const getBlogs = createAsyncThunk("blog/get-blogs", async (thunkAPI) => {
    } catch (error) {
       return thunkAPI.rejectWithValue(error);
    }
-})
-
+});
 export const createBlogs = createAsyncThunk(
    "blog/create-blogs",
    async (blogData, thunkAPI) => {
@@ -20,6 +19,7 @@ export const createBlogs = createAsyncThunk(
       }
    }
 );
+
 export const getABlog = createAsyncThunk(
    "blog/get-blog",
    async (id, thunkAPI) => {
@@ -40,6 +40,7 @@ export const updateABlog = createAsyncThunk(
       }
    }
 );
+
 export const deleteABlog = createAsyncThunk(
    "blog/delete-blog",
    async (id, thunkAPI) => {
@@ -58,8 +59,7 @@ const initialState = {
    isLoading: false,
    isSuccess: false,
    message: "",
-}
-
+};
 export const blogSlice = createSlice({
    name: "blogs",
    initialState,
@@ -147,4 +147,5 @@ export const blogSlice = createSlice({
          .addCase(resetState, () => initialState);
    },
 });
+
 export default blogSlice.reducer
