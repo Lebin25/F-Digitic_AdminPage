@@ -3,7 +3,6 @@ import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAnEnquiry, getEnquiries, resetState, updateAnEnquiry } from '../features/enquiry/enquirySlice';
 import { Link } from 'react-router-dom'
-import { AiFillDelete } from 'react-icons/ai'
 import { AiFillDelete, AiOutlineEye } from 'react-icons/ai'
 import CustomModal from '../components/CustomModal';
 
