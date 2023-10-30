@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -19,6 +19,10 @@ let schema = yup.object().shape({
 });
 
 const Addblog = () => {
+
+   const effectRan = useRef(false)
+   const formikRef = useRef();
+
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const location = useLocation();
@@ -46,6 +50,7 @@ const Addblog = () => {
          dispatch(resetState());
       }
    }, [getBlogId]);
+
    useEffect(() => {
       dispatch(resetState());
       dispatch(getCategories());
@@ -53,7 +58,7 @@ const Addblog = () => {
 
    useEffect(() => {
       if (isSuccess && createdBlog) {
-         toast.success('Blog Added Successfully!');
+         toast.success("Blog Added Successfullly!");
       }
       if (isSuccess && updatedBlog) {
          toast.success("Blog Updated Successfullly!");
@@ -65,16 +70,38 @@ const Addblog = () => {
    }, [isSuccess, isError, isLoading]);
 
    const img = [];
+
+   useEffect(() => {
+      if (effectRan.current === true) {
+         blogImages?.forEach((i) => {
+            img.push({
+               public_id: i.public_id,
+               url: i.url,
+            });
+         })
+         formik.values.images = img;
+      }
+      return () => {
+         effectRan.current = true
+      }
+      return () => { }
+   }, [blogImages]);
+
+
    imgState.forEach((i) => {
       img.push({
          public_id: i.public_id,
          url: i.url,
       });
    });
-   console.log(img);
    useEffect(() => {
-      formik.values.images = img;
-   }, [blogImages, imgState]);
+      if (effectRan.current === true) {
+         formik.values.images = img;
+      }
+      return () => {
+         effectRan.current = true
+      }
+   }, [imgState]);
 
    const formik = useFormik({
       enableReinitialize: true,
@@ -88,14 +115,16 @@ const Addblog = () => {
       onSubmit: (values) => {
          if (getBlogId !== undefined) {
             const data = { id: getBlogId, blogData: values };
+            console.log(data);
             dispatch(updateABlog(data));
             dispatch(resetState());
          } else {
+            console.log(values);
             dispatch(createBlogs(values));
             formik.resetForm();
             setTimeout(() => {
                dispatch(resetState());
-            }, 300);
+            }, 500);
          }
       },
    });
@@ -105,6 +134,7 @@ const Addblog = () => {
          <h3 className="mb-4 title">
             {getBlogId !== undefined ? "Edit" : "Add"} Blog
          </h3>
+
          <div className="">
             <form action="" onSubmit={formik.handleSubmit}>
                <div className="mt-4">
@@ -120,7 +150,6 @@ const Addblog = () => {
                <div className="error">
                   {formik.touched.title && formik.errors.title}
                </div>
-
                <select
                   name="category"
                   onChange={formik.handleChange("category")}
@@ -135,13 +164,12 @@ const Addblog = () => {
                         <option key={j} value={i.title}>
                            {i.title}
                         </option>
-                     )
+                     );
                   })}
                </select>
                <div className="error">
                   {formik.touched.category && formik.errors.category}
                </div>
-
                <ReactQuill
                   theme="snow"
                   className="mt-3"
@@ -152,10 +180,11 @@ const Addblog = () => {
                <div className="error">
                   {formik.touched.description && formik.errors.description}
                </div>
-
                <div className="bg-white border-1 p-5 text-center mt-3">
                   <Dropzone
-                     onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+                     onDrop={(acceptedFiles) => {
+                        dispatch(uploadImg(acceptedFiles))
+                     }}
                   >
                      {({ getRootProps, getInputProps }) => (
                         <section>
@@ -181,7 +210,7 @@ const Addblog = () => {
                            ></button>
                            <img src={i.url} alt="" width={200} height={200} />
                         </div>
-                     )
+                     );
                   })}
                </div>
 
@@ -194,7 +223,7 @@ const Addblog = () => {
             </form>
          </div>
       </div>
-   )
-}
+   );
+};
 
-export default Addblog
+export default Addblog;

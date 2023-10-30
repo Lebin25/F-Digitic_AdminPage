@@ -49,7 +49,6 @@ const Addcoupon = () => {
       }
    }, [getCouponId]);
 
-
    useEffect(() => {
       if (isSuccess && createdCoupon) {
          toast.success("Coupon Added Successfullly!");
@@ -62,7 +61,6 @@ const Addcoupon = () => {
          toast.error("Something Went Wrong!");
       }
    }, [isSuccess, isError, isLoading]);
-
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
@@ -81,7 +79,7 @@ const Addcoupon = () => {
             formik.resetForm();
             setTimeout(() => {
                dispatch(resetState());
-            }, 300);
+            }, 500);
          }
       },
    });
@@ -93,7 +91,6 @@ const Addcoupon = () => {
          </h3>
          <div>
             <form action="" onSubmit={formik.handleSubmit}>
-
                <CustomInput
                   type="text"
                   name="name"
@@ -106,7 +103,6 @@ const Addcoupon = () => {
                <div className="error">
                   {formik.touched.name && formik.errors.name}
                </div>
-
                <CustomInput
                   type="date"
                   name="expiry"
@@ -119,7 +115,6 @@ const Addcoupon = () => {
                <div className="error">
                   {formik.touched.expiry && formik.errors.expiry}
                </div>
-
                <CustomInput
                   type="number"
                   name="discount"
@@ -132,7 +127,6 @@ const Addcoupon = () => {
                <div className="error">
                   {formik.touched.discount && formik.errors.discount}
                </div>
-
                <button
                   className="btn btn-success border-0 rounded-3 my-5"
                   type="submit"
