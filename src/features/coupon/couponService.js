@@ -13,7 +13,6 @@ const createCoupons = async (coupon) => {
 
    return response.data;
 };
-
 const updateCoupon = async (coupon) => {
    const response = await axios.put(
       `${base_url}coupon/${coupon.id}`,
@@ -27,7 +26,6 @@ const updateCoupon = async (coupon) => {
 
    return response.data;
 };
-
 const getCoupon = async (id) => {
    const response = await axios.get(`${base_url}coupon/${id}`, config);
 
@@ -39,7 +37,6 @@ const deleteCoupon = async (id) => {
 
    return response.data;
 };
-
 const couponService = {
    getCoupons,
    createCoupons,
