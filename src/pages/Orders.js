@@ -33,10 +33,19 @@ const columns = [
    },
 ];
 
+const getTokenFromLocalStorage = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+
+const config3 = {
+   headers: {
+      'Authorization': `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""}`,
+      'Accept': 'application/json'
+   }
+}
+
 const Orders = () => {
    const dispatch = useDispatch();
    useEffect(() => {
-      dispatch(getOrders())
+      dispatch(getOrders(config3))
    }, [])
 
    const orderState = useSelector((state) => state.auth.orders.orders)
