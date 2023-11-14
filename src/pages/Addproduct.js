@@ -55,7 +55,7 @@ const Addproduct = () => {
       productColor,
       productQuantity,
       productImages,
-      updatedProduct, } = newProduct;
+      updatedProduct } = newProduct;
 
    useEffect(() => {
       if (getProductId !== undefined) {
@@ -93,9 +93,11 @@ const Addproduct = () => {
          value: i._id,
       });
    });
+   useEffect(() => {
+      formik.values.color = color ? color : " ";
+   }, [color])
 
    const img = [];
-
    useEffect(() => {
       if (effectRan.current === true) {
          productImages?.forEach((i) => {
@@ -127,11 +129,6 @@ const Addproduct = () => {
          effectRan.current = true
       }
    }, [imgState]);
-
-   useEffect(() => {
-      formik.values.color = color ? color : " ";
-      formik.values.images = img;
-   }, [color, img])
 
    const formik = useFormik({
       enableReinitialize: true,
