@@ -78,7 +78,7 @@ const Dashboard = () => {
       const data1 = [];
       for (let i = 0; i < ordersState?.length; i++) {
          data1.push({
-            key: i,
+            key: i + 1,
             name: ordersState[i]?.user.firstname + " " + ordersState[i]?.user.lastname,
             product: ordersState[i]?.orderItems?.length,
             price: ordersState[i]?.totalPrice,

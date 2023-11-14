@@ -36,12 +36,21 @@ const columns = [
    },
 ];
 
+const getTokenFromLocalStorage = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+
+const config3 = {
+   headers: {
+      'Authorization': `Bearer ${getTokenFromLocalStorage !== null ? getTokenFromLocalStorage.token : ""}`,
+      'Accept': 'application/json'
+   }
+}
+
 const Vieworder = () => {
    const location = useLocation();
    const orderId = location.pathname.split("/")[3];
    const dispatch = useDispatch();
    useEffect(() => {
-      dispatch(getOrderById(orderId));
+      dispatch(getOrderById({ orderId: orderId, config3: config3 }));
    }, []);
    const orderState = useSelector((state) => state.auth?.singleOrder?.orders);
    const data1 = [];

@@ -15,9 +15,9 @@ const getOrders = async (data) => {
    return response.data;
 }
 
-const getOrder = async (id) => {
+const getOrder = async (data) => {
    const response = await axios.get(
-      `${base_url}user/getOrder/${id}`, config
+      `${base_url}user/getOrder/${data.orderId}`, data.config3
    );
 
    return response.data;

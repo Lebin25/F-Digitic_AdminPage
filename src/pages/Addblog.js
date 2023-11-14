@@ -21,14 +21,13 @@ let schema = yup.object().shape({
 const Addblog = () => {
 
    const effectRan = useRef(false)
-   const formikRef = useRef();
 
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const location = useLocation();
    const getBlogId = location.pathname.split("/")[3];
-   const imgState = useSelector((state) => state.upload.images);
-   const bCatState = useSelector((state) => state.bCategory.bCategories);
+   const imgState = useSelector((state) => state.upload?.images);
+   const bCatState = useSelector((state) => state.bCategory?.bCategories);
    const blogState = useSelector((state) => state.blog);
    const {
       isSuccess,

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import ReactQuill from 'react-quill';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -13,7 +13,7 @@ import { getBrands } from '../features/brand/brandSlice';
 import { getCategories } from '../features/pcategory/pcategorySlice';
 import { getColors } from '../features/color/colorSlice';
 import { delImg, uploadImg } from '../features/upload/uploadSlice';
-import { createProduct, resetState } from '../features/product/productSlice';
+import { createProduct, getAProduct, resetState, updateAProduct } from '../features/product/productSlice';
 
 let schema = yup.object().shape({
    title: yup.string().required('Title is required'),
@@ -27,32 +27,64 @@ let schema = yup.object().shape({
 });
 
 const Addproduct = () => {
+
+   const effectRan = useRef(false)
+
    const dispatch = useDispatch();
    const navigate = useNavigate();
+   const location = useLocation();
+   const getProductId = location.pathname.split("/")[3];
    const [color, setColor] = useState([]);
    const [images, setImages] = useState([]);
+   const brandState = useSelector((state) => state.brand?.brands)
+   const pCatState = useSelector((state) => state.pCategory?.pCategories)
+   const colorState = useSelector((state) => state.color?.colors)
+   const imgState = useSelector((state) => state.upload?.images)
+   const newProduct = useSelector((state) => state.product)
+   const {
+      isSuccess,
+      isError,
+      isLoading,
+      createdProduct,
+      productName,
+      productDesc,
+      productPrice,
+      productBrand,
+      productCategory,
+      productTag,
+      productColor,
+      productQuantity,
+      productImages,
+      updatedProduct, } = newProduct;
 
    useEffect(() => {
+      if (getProductId !== undefined) {
+         dispatch(getAProduct(getProductId));
+         img.push(productImages);
+      } else {
+         dispatch(resetState());
+      }
+   }, [getProductId]);
+
+   useEffect(() => {
+      dispatch(resetState())
       dispatch(getBrands())
       dispatch(getCategories())
       dispatch(getColors())
    }, [])
 
-   const brandState = useSelector((state) => state.brand.brands)
-   const pCatState = useSelector((state) => state.pCategory.pCategories)
-   const colorState = useSelector((state) => state.color.colors)
-   const imgState = useSelector((state) => state.upload.images)
-   const newProduct = useSelector((state) => state.product)
-
-   const { isSuccess, isError, isLoading, createdProduct } = newProduct;
    useEffect(() => {
       if (isSuccess && createdProduct) {
-         toast.success('Product Added Successfully!');
+         toast.success("Product Added Successfullly!");
+      }
+      if (isSuccess && updatedProduct) {
+         toast.success("Product Updated Successfullly!");
+         navigate("/admin/list-product");
       }
       if (isError) {
-         toast.error('Something Went Wrong!');
+         toast.error("Something Went Wrong!");
       }
-   }, [isSuccess, isError, isLoading])
+   }, [isSuccess, isError, isLoading]);
 
    const coloropt = [];
    colorState.forEach((i) => {
@@ -63,6 +95,23 @@ const Addproduct = () => {
    });
 
    const img = [];
+
+   useEffect(() => {
+      if (effectRan.current === true) {
+         productImages?.forEach((i) => {
+            img.push({
+               public_id: i.public_id,
+               url: i.url,
+            });
+         })
+         formik.values.images = img;
+      }
+      return () => {
+         effectRan.current = true
+      }
+      return () => { }
+   }, [productImages]);
+
    imgState.forEach((i) => {
       img.push({
          public_id: i.public_id,
@@ -71,40 +120,55 @@ const Addproduct = () => {
    })
 
    useEffect(() => {
+      if (effectRan.current === true) {
+         formik.values.images = img;
+      }
+      return () => {
+         effectRan.current = true
+      }
+   }, [imgState]);
+
+   useEffect(() => {
       formik.values.color = color ? color : " ";
       formik.values.images = img;
    }, [color, img])
 
    const formik = useFormik({
+      enableReinitialize: true,
       initialValues: {
-         title: '',
-         description: '',
-         price: '',
-         brand: '',
-         category: '',
-         tags: '',
-         color: '',
-         quantity: '',
-         images: '',
+         title: productName || "",
+         description: productDesc || "",
+         price: productPrice || "",
+         brand: productBrand || "",
+         category: productCategory || "",
+         tags: productTag || "",
+         color: productColor || "",
+         quantity: productQuantity || "",
+         images: productImages || "",
       },
       validationSchema: schema,
       onSubmit: (values) => {
-         dispatch(createProduct(values));
-         formik.resetForm();
-         setColor(null);
-         setTimeout(() => {
-            dispatch(resetState())
-         }, 500)
+         if (getProductId !== undefined) {
+            const data = { id: getProductId, productData: values };
+            dispatch(updateAProduct(data));
+            dispatch(resetState());
+         } else {
+            dispatch(createProduct(values));
+            formik.resetForm();
+            setTimeout(() => {
+               dispatch(resetState())
+               navigate("/admin/list-product")
+            }, 300);
+         }
       },
    });
 
    const handleColors = (e) => {
       setColor(e)
-      console.log(color);
    }
    return (
       <div>
-         <h3 className="mb-4 title">Add Product</h3>
+         <h3 className="mb-4 title">{getProductId !== undefined ? "Edit" : "Add"} Products</h3>
          <div>
             <form onSubmit={formik.handleSubmit} className='d-flex gap-3 flex-column'>
 
@@ -206,7 +270,7 @@ const Addproduct = () => {
                   })}
                </div>
 
-               <button className='btn btn-success border-0 rounded-3 my-5' type='submit'>Add Product</button>
+               <button className='btn btn-success border-0 rounded-3 my-5' type='submit'>{getProductId !== undefined ? "Edit" : "Add"} Products</button>
 
             </form>
          </div>
